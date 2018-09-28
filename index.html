@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script src="/grist-plugin-api.js"></script>
+    <script src="./view.js"></script>
+    <link rel="stylesheet" href="./view.css">
+  </head>
+  <body>
+    <h1>Credentials</h1>
+    <form class="credentials">
+      <label for="storeName">Store name</label>
+      <input type="text" id="storeName"><br>
+      <label for="apiKey">Api key</label>
+      <input type="text" id="apiKey"><br>
+      <label for="apiSecret">Api secret</label>
+      <input type="password" id="apiSecret">
+    </form>
+    <input type="button" id="saveCredentials" value="Save">
+    <h1>Shopify Filters</h1>
+    <div>
+      <label for="start">Start</label>
+      <input type="date" id="startDate"/>
+    </div>
+    <div>
+        <label for="end">End</label>
+        <input type="date" id="endDate"/ >
+    </div>
+    <input type="button" id="update" value="Update">
+    <div id="loader" class="loader-wrapper"></div>
+    <div id="result"></div>
+  </body>
+</html>

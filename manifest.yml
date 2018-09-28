@@ -1,0 +1,8 @@
+name: wildflower
+version: 0.0.1
+components:
+  unsafeNode: server/index.js
+contributions:
+  customSections:
+    - path: index.html
+      name: Shopify plugin

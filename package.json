@@ -1,0 +1,14 @@
+{
+  "name": "grist-plugin-shopify",
+  "version": "1.0.0",
+  "devDependencies": {
+    "grain-rpc": "^0.1.6",
+    "mocha": "^5.2.0",
+    "sinon": "^6.3.4"
+  },
+  "dependencies": {
+    "fse": "^4.0.1",
+    "lodash": "^4.17.11",
+    "shopify-api-node": "^2.15.2"
+  }
+}
