@@ -46,7 +46,7 @@ export function prepareUpdates(keyId: string, local: ITableData, fetched: IRecor
   for (const rec of fetched) {
     const key = rec[keyId];
     const localIndex = localByKey.get(key);
-    if (localIndex) {
+    if (localIndex !== undefined) {
       if (Object.keys(rec).some((k) => (rec[k] !== local[k][localIndex]))) {
         changes.set(local.id[localIndex], rec);
       }
@@ -68,7 +68,8 @@ export async function applyUpdates(docApi: GristDocAPI, tableId: string, updates
     userActions.push(['BulkAddRecord', tableId, rowIds, recordsToData(additions)]);
   }
   if (changes.size) {
-    userActions.push(['BulkUpdateRecord', tableId, changes.keys(), recordsToData(Array.from(changes.values()))]);
+    const rowIds = Array.from(changes.keys());
+    userActions.push(['BulkUpdateRecord', tableId, rowIds, recordsToData(Array.from(changes.values()))]);
   }
   if (userActions.length) {
     await docApi.applyUserActions(userActions);
