@@ -4,5 +4,5 @@ components:
   unsafeNode: server/index.js
 contributions:
   customSections:
-    - path: index.html
+    - path: frontend/index.html
       name: Shopify plugin

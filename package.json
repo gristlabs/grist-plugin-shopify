@@ -1,13 +1,30 @@
 {
   "name": "grist-plugin-shopify",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "description": "Grist plugin to import orders from a Shopify store",
+  "scripts": {
+    "build": "rm -rf dist/ && tsc",
+    "watch": "rm -rf dist/ && tsc-w",
+    "tsc-w": "tsc -w --preserveWatchOutput",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "Apache-2.0",
+  "files": [
+    "manifest.yml",
+    "dist/**/*.js",
+    "static/"
+  ],
   "devDependencies": {
+    "@types/lodash": "^4.14.116",
     "grain-rpc": "^0.1.6",
+    "grist-plugin-api": "file:///Users/dmitry/devel/grist2/public-api/grist-plugin-api",
     "mocha": "^5.2.0",
-    "sinon": "^6.3.4"
+    "sinon": "^6.3.4",
+    "tslint": "^5.11.0",
+    "tslint-language-service": "^0.9.9",
+    "typescript": "^3.1.1"
   },
   "dependencies": {
-    "fse": "^4.0.1",
     "lodash": "^4.17.11",
     "shopify-api-node": "^2.15.2"
   }
