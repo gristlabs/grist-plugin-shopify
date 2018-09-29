@@ -79,5 +79,18 @@ describe('dataUpdates', function() {
       });
       sinon.assert.notCalled(docApi.applyUserActions);
     });
+
+    it("should convert Dates to timestamps", async function() {
+      const docApi = {applyUserActions: sinon.spy()} as any;
+      await dataUpdates.applyUpdates(docApi, "MyTable", {
+        additions: [{foo: new Date("2018-01-01")}],
+        changes: new Map([[17, {foo: new Date("2018-08-22T18:00:00-07:00")}]]),
+      });
+      sinon.assert.calledOnce(docApi.applyUserActions);
+      assert.deepEqual(docApi.applyUserActions.getCall(0).args[0], [
+        ['BulkAddRecord', "MyTable", [null], {foo: [1514764800]}],
+        ['BulkUpdateRecord', "MyTable", [17], {foo: [1534986000]}],
+      ]);
+    });
   });
 });

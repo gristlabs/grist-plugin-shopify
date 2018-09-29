@@ -72,17 +72,17 @@ async function getCredentials(): Promise<Shopify.IPrivateShopifyConfig> {
   return {...credentials, apiSecret};
 }
 
-async function fetchLineItems(shopify: Shopify, params: IShopifyParams): Promise<ILineItem[]> {
+export async function fetchLineItems(shopify: Shopify, params: IShopifyParams): Promise<ILineItem[]> {
   const limit = 250;    // Max allowed per call.
   const status = 'any';
   const records: ILineItem[] = [];
   for (let page = 1; ; page++) {
     const orders = await shopify.order.list({...params, status, limit, page});
-    if (orders.length < limit) {
-      break;
-    }
     for (const order of orders) {
       processOrder(records, order);
+    }
+    if (orders.length < limit) {
+      break;
     }
   }
   return records;

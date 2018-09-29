@@ -78,5 +78,13 @@ export async function applyUpdates(docApi: GristDocAPI, tableId: string, updates
 
 function recordsToData<Record extends {[key: string]: any}>(records: Record[]): ITableData {
   if (!records.length) { return {}; }
-  return mapValues(records[0], (val, key) => records.map((r) => r[key]));
+  return mapValues(records[0], (val, key) => records.map((r) => convert(r[key])));
+}
+
+function convert(value: any): any {
+  if (value instanceof Date) {
+    // Convert dates to seconds since Epoch, as needed by Grist Date and DateTime columns.
+    return value.getTime() / 1000;
+  }
+  return value;
 }
