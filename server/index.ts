@@ -8,8 +8,11 @@ import {applyUpdates, fetchTable, ITableData, prepareUpdates} from './dataUpdate
 const storageApi: grist.Storage = grist.rpc.getStub('DocStorage@grist');
 const docApi: grist.GristDocAPI = grist.rpc.getStub('GristDocAPI@grist');
 
+const DestTableId = "ShopifyItems";
+
+// This determines which columns get created in Grist for the destination table.
 const columns = [
-  {id: "ShopifyId",     type: "string"    },
+  {id: "ShopifyId",     type: "Text"    },
   {id: "ProcessedAt",   type: "DateTime"  },
   {id: "OrderNumber",   type: "Text"      },
   {id: "VariantTitle",  type: "Text"      },
@@ -25,6 +28,7 @@ const columns = [
   {id: "UpdatedAt",     type: "DateTime"  },
 ];
 
+// Type of the record object we extract from the Shopify API.
 interface ILineItem {
   ShopifyId: number;
   ProcessedAt: Date;
@@ -42,28 +46,31 @@ interface ILineItem {
   UpdatedAt: Date;
 }
 
+// Type of the parameters to updateTable() call.
 interface IShopifyParams {
   startDate: Date;
   endDate: Date;
 }
 
+// Type of the result of updateTable() call.
 interface IUpdateResult {
   updated: number;
   added: number;
 }
 
-// Update table 'ShopifyItems'. If that table does not exist, creates it.
+// Updates the destination table with data from the Shopify API. Creates the table if needed.
 export async function updateTable(params: IShopifyParams): Promise<IUpdateResult> {
   const credentials = await getCredentials();
   const shopify = new Shopify(credentials);
-  const localTable: ITableData = await fetchTable(docApi, 'ShopifyItems', columns);
+  const localTable: ITableData = await fetchTable(docApi, DestTableId, columns);
   const fetched: ILineItem[] = await fetchLineItems(shopify, params);
 
   const updates = prepareUpdates('ShopifyId', localTable, fetched);
-  await applyUpdates(docApi, 'ShopifyItems', updates);
+  await applyUpdates(docApi, DestTableId, updates);
   return {added: updates.additions.length, updated: updates.changes.size};
 }
 
+// Helper that gets Shopify credentials from storageApi.
 async function getCredentials(): Promise<Shopify.IPrivateShopifyConfig> {
   const [credentials, apiSecret] = await Promise.all([
     storageApi.getItem('shopify-credentials'),
@@ -72,6 +79,7 @@ async function getCredentials(): Promise<Shopify.IPrivateShopifyConfig> {
   return {...credentials, apiSecret};
 }
 
+// Pulls Shopify orders and converts them to ILineItem records.
 export async function fetchLineItems(shopify: Shopify, params: IShopifyParams): Promise<ILineItem[]> {
   const limit = 250;    // Max allowed per call.
   const status = 'any';
@@ -88,6 +96,8 @@ export async function fetchLineItems(shopify: Shopify, params: IShopifyParams): 
   return records;
 }
 
+// Converts an individual Shopify order into one or more ILineItem records. Creates a new record
+// for each line item in the order, and for each line item of every refund (if any).
 function processOrder(records: ILineItem[], order: Shopify.IOrder): void {
   for (const item of order.line_items) {
     // Typescript types for IOrderLineItem are off or out of date for discount_allocations and tax_lines.
