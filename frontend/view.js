@@ -53,9 +53,9 @@ class Shopify {
   // state in the docStorage (timestamp maybe ?).
   updateTable() {
     const startDate = new Date($el('startDate').value);
-    const endDate = new Date($el('endDate').value);
+    const endDate = new Date($el('endDate').value + " 23:59:59.999");   // Use end-of-day
     $el('loader').classList.add('loader');
-    grist.rpc.callRemoteFunc('updateTable@server/index.js', {endDate, startDate})
+    grist.rpc.callRemoteFunc('updateTable@dist/server/index.js', {endDate, startDate})
       .then(res => this.showMessage(res))
       .catch(err => this.showError(err))
       .then(() => $el('loader').classList.remove('loader'));
