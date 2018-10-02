@@ -4,7 +4,7 @@
   "description": "Grist plugin to import orders from a Shopify store",
   "scripts": {
     "build": "rm -rf dist/ && tsc",
-    "watch": "rm -rf dist/ && tsc-w",
+    "watch": "rm -rf dist/ && npm run tsc-w",
     "tsc-w": "tsc -w --preserveWatchOutput",
     "test": "mocha test/**/*.ts"
   },

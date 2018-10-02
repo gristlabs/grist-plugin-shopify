@@ -47,7 +47,7 @@ export function prepareUpdates(keyId: string, local: ITableData, fetched: IRecor
     const key = rec[keyId];
     const localIndex = localByKey.get(key);
     if (localIndex !== undefined) {
-      if (Object.keys(rec).some((k) => (rec[k] !== local[k][localIndex]))) {
+      if (Object.keys(rec).some((k) => (convert(rec[k]) !== local[k][localIndex]))) {
         changes.set(local.id[localIndex], rec);
       }
     } else {

@@ -1,7 +1,7 @@
 name: wildflower
 version: 0.0.1
 components:
-  unsafeNode: server/index.js
+  unsafeNode: dist/server/index.js
 contributions:
   customSections:
     - path: frontend/index.html
