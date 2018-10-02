@@ -76,7 +76,7 @@ export async function applyUpdates(docApi: GristDocAPI, tableId: string, updates
   }
 }
 
-function recordsToData<Record extends {[key: string]: any}>(records: Record[]): ITableData {
+function recordsToData(records: IRecord[]): ITableData {
   if (!records.length) { return {}; }
   return mapValues(records[0], (val, key) => records.map((r) => convert(r[key])));
 }
